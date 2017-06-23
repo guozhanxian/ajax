@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css"
+	href="lib2/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="lib2/themes/icon.css">
+<script type="text/javascript" src="lib2/jquery.min.js"></script>
+<script type="text/javascript" src="lib2/jquery.easyui.min.js"></script>
+<script>
+	$(function() {
+		var datagrid; //定义全局变量  
+		var editRow = "";//定义当前编辑的行  
+		datagrid = $("#dataGrid").datagrid({
+			title : "学生信息管理",
+			border : false,
+			locale : "zh_CN",
+			iconCls : 'icon-save',
+			striped : true,
+			sortOrder : "desc",
+			collapsible : false,
+			url : "findStudentByPage2.do",
+			columns : [ [ {
+				field : 'studId',
+				title : '学号',
+				width : '24%',
+				algin : 'center'
+			}, {
+				field : 'studName',
+				title : '姓名',
+				width : '40%',
+				align : 'center'
+			}, {
+				field : 'studBirth',
+				title : '生日',
+				width : '40%',
+				align : 'center'
+			} ] ],
+			toolbar : [ {
+				id : 'btnAdd',
+				text : "添加",
+				iconCls : 'icon-add',
+				handler : function() {
+					$("#winAdd").window("open");
+				}
+			}, {
+				id : 'btnEdit',
+				text : "修改",
+				iconCls : 'icon-edit',
+				handler : function() {
+					alert("修改");
+				}
+			} ],
+			pagination : true,//表示在datagrid设置分页              
+			rownumbers : false,
+			singleSelect : true,
+			pageSize : 3,
+			pageList : [3],
+			width:500,
+			height:300
+		});
+		$('#dataGrid').datagrid('getPager').pagination({
+			pageSize : 3,
+			pageNumber : 1,
+			pageList : [3],
+			beforePageText : '第',//页数文本框前显示的汉字   
+			afterPageText : '页    共 {pages} 页',
+			displayMsg : '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+		});
+		$("#dataGrid").datagrid("reload");
+	});
+	
+</script>
+</head>
+<body>
+	<!--数据展示 -->
+	<div data-options="region:'center',fit:true,split:false,border:false">
+		<table id="dataGrid" style="width: 100%"></table>
+	</div>
+</body>
+</html>

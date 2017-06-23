@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!DOCTYPE XXX SYSTEM "aaa.dtd">
+<XXX>
+	<AAA>Hello</AAA>
+	<BBB><![CDATA[HELLO 12345566]]></BBB>
+</XXX>

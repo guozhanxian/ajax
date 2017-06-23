@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="lib/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>
+<script>
+	$(function() {
+		$.ajax({
+					url : 'http://web.juhe.cn:8080/finance/stock/hs?dtype=jsonp&gid=sh601009&key=d8cfba15cbc73f9a983d797c48e53aa7&callback=hello',
+					type : 'get',
+					function(data){
+						alert(data);
+					}
+				});
+	});
+	function hello(data) {
+		alert(data);
+	}
+</script>
+</head>
+<body>
+</body>
+</html>

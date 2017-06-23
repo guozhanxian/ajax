@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script>
+	function sendMsg()
+	{
+		var msg=$('#first').val();
+		$.ajax({
+			url:'first.do?name='+msg,
+		    type:'get',
+		    success:function(data){
+		    	$('#res').css('color','green').html(data);
+		    }
+		});
+	}
+</script>
+</head>
+<body>
+	<input type="text" id="first" />
+	<button onclick="sendMsg()">确定</button>
+	<h1 id="res"></h1>
+	<h2>11111</h2>
+	<h2>22222</h2>
+	<h2>33333</h2>
+</body>
+</html>

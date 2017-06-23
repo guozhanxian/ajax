@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+#search {
+	text-align: center;
+	position: relative;
+}
+
+.autocomplete {
+	border: 1px solid #9ACCFB;
+	background-color: white;
+	text-align: left;
+}
+
+.autocomplete li {
+	list-style-type: none;
+}
+
+.clickable {
+	cursor: default;
+}
+
+.highlight {
+	background-color: #9ACCFB;
+}
+</style>
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script>
+	var num = 0;
+	$(function(){
+		$('#search-text').keyup(function(event){
+			var str = $(this).val();
+			if(event.which==38){
+				if(num>0)
+					num--;
+				$('#res li').removeClass('highlight');
+				$('#res li:nth('+num+')').addClass('highlight');
+			}else if(event.which==40){
+				var allNum = $('#res li').length;
+				if(num<allNum)
+					num++;
+				$('#res li').removeClass('highlight');
+				$('#res li:nth('+num+')').addClass('highlight');
+			}else if(event.which==13){
+				$('#search-text').val($('#res li:nth('+num+')').text());
+				$('#res').remove();
+			}else{
+				$.getJSON('autoComplete.do?str='+str,function(data){
+					if(data && data.length>0)
+					{
+						$('#res').remove();
+						var sss = "<div id=\"res\" style=\"display:none\" class=\"autocomplete\">";
+						for(var i=0;i<data.length;i++)
+						{
+							sss+="<li>"+data[i]+"</li>";	
+						}
+						sss+="</div>";
+						$('#search').append(sss);
+						$('#res').show('slow');
+					}	
+				});
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="search">
+		<label for="search-text">请输入关键词</label> <input type="text"
+			id="search-text" name="search-text" /> <input type="button"
+			id="submit" value="搜索" />
+	</div>
+</body>
+</html>

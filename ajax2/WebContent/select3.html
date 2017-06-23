@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+    <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+
+    <script src="lib/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>  
+    <script src="lib/ligerUI/js/core/base.js" type="text/javascript"></script>
+    <script src="lib/ligerUI/js/plugins/ligerCheckBox.js" type="text/javascript"></script>
+    <script src="lib/ligerUI/js/plugins/ligerComboBox.js" type="text/javascript"></script>
+    <script src="lib/ligerUI/js/plugins/ligerResizable.js" type="text/javascript"></script>
+    <script>
+        var pid = 1;
+    	$(function(){
+    		$('#prov').ligerComboBox({
+				url:'findAllProv.do',
+				valueField:'pId',
+				textField: 'pName',
+				onSelected:function(value,text){
+					pid = value;
+					window.g.set('url','findCityByProv.do');
+					window.g.set('parms',{pid:pid});
+					window.g.reload();
+				}
+			});
+    		
+    		window.g = $('#city').ligerComboBox({
+				valueField:'cId',
+				url:'findCityByProv.do',
+				parms:{pid:pid},
+				textField:'cName'
+			});
+    		
+    		liger.get('prov').selectValue(1);
+    	});
+    </script>
+</head>
+<body style="padding:50px">
+	<input type="text" id="prov" />
+	<input type="text" id="city" />
+</body>
+</html>

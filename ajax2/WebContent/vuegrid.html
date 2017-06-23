@@ -1,0 +1,114 @@
+demo.css
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="demo.css" />
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.3.3/vue.js"></script>
+<script>
+	var pagesize = 3;
+	var vm;
+	$(function() {
+		$.getJSON('findStudentByPage3.do', {
+			pagesize : pagesize
+		}, function(tt) {
+			vm = new Vue({
+				el : '#app',
+				data : {
+					res : tt,
+					newStud:{
+						studId:'',
+						studName:'',
+						studBirth:''
+					}
+				},
+				methods:{
+					go:function(n){
+						$.getJSON('findStudentByPage3.do',{pagesize:pagesize,page:n},function(qq){
+							vm.res = qq;
+						});
+					},
+					createPerson:function(){
+						var str = JSON.stringify(vm.newStud);
+						$.getJSON('addStudent.do',{str:str},function(rr){
+							if(rr.code=='200')
+							{
+								//成功
+								vm.go(1);
+							}else{
+								alert('添加学生信息失败！');
+							}
+						});
+					},
+					deletePerson:function(n){
+						var f = window.confirm('你确认要删除该条数据吗？');
+						if(f){
+							var arr = [n+''];
+							var str = JSON.stringify(arr);
+							$.getJSON('deleteStudents.do',{str:str},function(qq){
+								if(qq.code=='200')
+								{
+									vm.go(1);
+								}else{
+									alert('删除学生信息失败！');
+								}	
+							});
+						}
+					}
+				}
+			});
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="app">
+		<fieldset>
+                <legend>
+                    	添加学生信息
+                </legend>
+                <div class="form-group">
+                    <label>学号:</label>
+                    <input type="text" v-model="newStud.studId"/>
+                </div>
+                <div class="form-group">
+                    <label>姓名:</label>
+                    <input type="text" v-model="newStud.studName"/>
+                </div>
+                <div class="form-group">
+                    <label>生日:</label>
+                    <input type="text" v-model="newStud.studBirth">
+                </select>
+                </div>
+                <div class="form-group">
+                    <label></label>
+                    <button @click="createPerson">保存</button>
+                </div>
+        </fieldset>
+		<table>
+			<thead>
+				<tr>
+					<th>学号</th>
+					<th>姓名</th>
+					<th>生日</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="s in res.result">
+					<td>{{ s.studId }}</td>
+					<td>{{ s.studName }}</td>
+					<td>{{ s.studBirth }}</td>
+					<td :class="'text-center'"><button @click="deletePerson(s.studId)">Delete</button></td>
+				</tr>
+			</tbody>
+		</table>
+		<ul class="pagination">
+			<li v-for="n in res.totalPage"><a @click="go(n)"
+				v-bind:class="res.currentPage === n  ? 'active' : ''">{{ n }}</a></li>
+		</ul>
+	</div>
+</body>
+</html>

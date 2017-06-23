@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<students>
+   <student id="1">
+       <name>张三</name>
+	   <age>23</age>
+	   <major>计算机</major>
+   </student>
+   <student id="3">
+       <name>李四</name>
+	   <age>23</age>
+	   <major>英语</major>
+   </student>
+   <student id="8">
+       <name>王五</name>
+	   <age>23</age>
+	   <major>计算机</major>
+   </student>
+   <student id="8">
+       <name>赵六</name>
+	   <age>28</age>
+	   <major>会计</major>
+   </student>
+   <student id="8">
+       <name>悟空</name>
+	   <age>33</age>
+	   <major>数学</major>
+   </student>
+</students>

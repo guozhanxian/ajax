@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script>
+    var xhr;
+	window.onload = function(){
+		if(window.XMLHttpRequest)
+		{
+			xhr = new XMLHttpRequest();
+		}else{
+			xhr = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		
+		xhr.open('get','findAllProv.do');
+		xhr.onreadystatechange = handleResp;
+		xhr.send('');
+	};
+	
+	function handleResp()
+	{
+		var state = xhr.readyState;
+		if(state == 4)
+		{
+			var code = xhr.status;
+			if(code>=200 && code<300)
+			{
+				var prov = document.getElementById('prov');
+				var str = xhr.responseText;
+				var obj = eval("("+str+")");
+				for(var i=0;i<obj.length;i++)
+				{
+					var opt = new Option(obj[i].pName,obj[i].pId);
+					prov.add(opt);
+				}
+				prov.onchange = function(){
+					changeCity(this.value);
+				};
+				changeCity(obj[0].pId);
+			}	
+		}	
+	}
+	
+	function changeCity(pid)
+	{
+		$.getJSON('findCityByProv.do?pid='+pid,function(data){
+			var city = document.getElementById('city');
+			$('#city').html('');
+			for(var i=0;i<data.length;i++)
+			{
+				var opt = new Option(data[i].cName,data[i].cId);
+				city.add(opt);
+			}	
+		});
+	}
+</script>
+</head>
+<body>
+	省：<select id="prov"></select>
+	市：<select id="city"></select>
+	<br>
+	<h1>AAAAA</h1>
+	<h1>AAAAA</h1>
+	<h1>AAAAA</h1>
+	<h1>AAAAA</h1>
+	<h1>AAAAA</h1>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script>
+   function search()
+   {
+   	   var code = $('#code').val();
+	   $.getJSON('getJuHe.do?code='+code,function(data){
+		   if(data.resultcode==200)
+		   {
+			   $('#res').html(data.result[0].data.nowPri);
+		   } 
+	   });
+   }
+</script>
+</head>
+<body>
+   <input type="text" id="code" /><button onclick="search()">查询</button>
+   <br>
+   <h1 id="res"></h1>
+</body>
+</html>

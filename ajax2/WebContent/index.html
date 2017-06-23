@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+<link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet"
+	type="text/css" />
+<link href="lib/ligerUI/skins/ligerui-icons.css" rel="stylesheet"
+	type="text/css" />
+<link href="lib/ligerUI/skins/Gray/css/all.css" rel="stylesheet"
+	type="text/css" />
+<script src="lib/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>
+<script src="lib/ligerUI/js/core/base.js" type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerGrid.js" type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerToolBar.js"
+	type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerResizable.js"
+	type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerCheckBox.js"
+	type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerDrag.js" type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerDialog.js"
+	type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerComboBox.js"
+	type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerDateEditor.js"
+	type="text/javascript"></script>
+<script>
+	$(function() {
+		window['g'] = $("#maingrid").ligerGrid({
+			columns : [ {
+				display : '学号',
+				name : 'studId',
+				align : 'left',
+				width : 100,
+				minWidth : 60
+			}, {
+				display : '姓名',
+				name : 'studName',
+				minWidth : 120
+			}, {
+				display : '生日',
+				name : 'studBirth',
+				minWidth : 140
+			} ],
+			url : 'findStudentByPage.do',
+			width : 600,
+			height : 300,
+			pageSizeOptions : [ 3 ],
+			pageSize : 3,
+			checkbox: true,
+			rownumbers : true,
+			toolbar : {
+				items : [ {
+					text : '增加',
+					click : addStudent,
+					icon : 'add'
+				}, {
+					line : true
+				}, {
+					text : '修改',
+					click : updateStudent,
+					icon : 'modify'
+				}, {
+					line : true
+				}, {
+					text : '删除',
+					click : delStudent,
+					icon : 'del'
+				} ]
+			}
+		});
+		$('#pageloading').hide();
+		$('#studBirth').ligerDateEditor();
+	});
+	function addStudent() {
+		$.ligerDialog.open({
+			target : $("#target1"),
+			buttons : [ {
+				text : '保存',
+				onclick : function(item, dialog) {
+					//通过Ajax保存学生信息
+					var stud = {};
+					stud.studId = $('#studId').val();
+					stud.studName = $('#studName').val();
+					stud.studBirth = $('#studBirth').val();
+					var str = JSON.stringify(stud);
+					
+					var qqq = $('#qqq').formSerialize();
+					
+					$.getJSON('addStudent.do?str='+str,function(data){
+						if(data && data.code=='200'){
+							$.ligerDialog.success(data.msg);
+							window.g.reload();
+						}else{
+							$.ligerDialog.error(data.msg);
+						}
+					});
+					dialog.hidden();
+				}
+			}, {
+				text : '取消',
+				onclick : function(item, dialog) {
+					dialog.hidden();
+				}
+			} ]
+		});
+	}
+	function updateStudent() {
+
+	}
+	function delStudent() {
+		var rows = window.g.getSelectedRows();
+		var arr = [];
+		for(var i=0;i<rows.length;i++)
+		{
+			arr.push(rows[i].studId+'');
+		}
+		var str = JSON.stringify(arr);
+		
+		$.getJSON('deleteStudents.do?str='+str,function(data){
+			if(data && data.code=='200'){
+				$.ligerDialog.success(data.msg);
+				window.g.reload();
+			}else{
+				$.ligerDialog.error(data.msg);
+			}
+		});
+	}
+</script>
+</head>
+
+<body>
+	<div class="l-loading" style="display: block" id="pageloading"></div>
+	<div id="maingrid"></div>
+	<div id="target1" style="width: 200px; margin: 3px; display: none;">
+		<h3>添加学生信息</h3>
+		<div>
+			<form id="qqq">
+			学号：<input type="text" id="studId" name="studId" placeholder="学号" /><br />
+			姓名：<input type="text" id="studName" name="studName" placeholder="姓名" /><br />
+			生日：<input type="text" id="studBirth" name="studBirth"
+				placeholder="生日" /><br />
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>

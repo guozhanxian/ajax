@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+    var xhr;
+	function sendMsg()
+	{
+		if(window.XMLHttpRequest)
+		{
+			xhr = new XMLHttpRequest();
+		}else{
+			xhr = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		
+		var data = document.getElementById('first').value;
+		if(data && data.length>0)
+		{
+			xhr.open('get','first.do?name='+data+"&age=22");
+			xhr.onreadystatechange = parseResponse;
+			xhr.send('');
+		}
+	}
+	function parseResponse()
+	{
+		var state = xhr.readyState;
+		if(state == 4)
+		{
+			var status = xhr.status;
+			if(status>=200 && status<300)
+			{
+				document.getElementById('res').innerHTML = xhr.responseText;
+			}else{
+				alert('刚才的操作失败，请重试！');
+			}
+		}	
+	}
+</script>
+</head>
+<body>
+	<input type="text" id="first" />
+	<button onclick="sendMsg()">确定</button>
+	<h1 id="res"></h1>
+	<h2>11111</h2>
+	<h2>22222</h2>
+	<h2>33333</h2>
+</body>
+</html>
